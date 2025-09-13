@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Diary - Your Personal Journal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <h1>Daily Diary</h1>
+                </div>
+                <div class="header-controls">
+                    <button id="dark-mode-toggle" class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="main-content">
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-tab="write">
+                        <i class="fas fa-edit"></i>
+                        <span>Write Entry</span>
+                    </button>
+                    <button class="nav-item" data-tab="calendar">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Calendar View</span>
+                    </button>
+                    <button class="nav-item" data-tab="analytics">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Mood Analytics</span>
+                    </button>
+                    <button class="nav-item" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                </nav>
+                
+                <div class="sidebar-footer">
+                    <div class="streak-counter">
+                        <i class="fas fa-fire"></i>
+                        <div>
+                            <span class="streak-number" id="streak-count">0</span>
+                            <span class="streak-label">Day Streak</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="content-area">              
+                <section id="write-tab" class="tab-content active">
+                    <div class="write-header">
+                        <h2>Today's Entry</h2>
+                        <div class="current-date" id="current-date"></div>
+                    </div>
+                    
+                    <div class="entry-form">
+                        <div class="mood-selection">
+                            <h3>How are you feeling?</h3>
+                            <div class="mood-grid">
+                                <button class="mood-btn" data-mood="Ecstatic">
+                                    <i class="fas fa-laugh-beam"></i>
+                                    <span>Ecstatic</span>
+                                </button>
+                                <button class="mood-btn" data-mood="Happy">
+                                    <i class="fas fa-smile"></i>
+                                    <span>Happy</span>
+                                </button>
+                                <button class="mood-btn" data-mood="Content">
+                                    <i class="fas fa-meh"></i>
+                                    <span>Content</span>
+                                </button>
+                                <button class="mood-btn" data-mood="Anxious">
+                                    <i class="fas fa-frown"></i>
+                                    <span>Anxious</span>
+                                </button>
+                                <button class="mood-btn" data-mood="Sad">
+                                    <i class="fas fa-sad-tear"></i>
+                                    <span>Sad</span>
+                                </button>
+                                <button class="mood-btn" data-mood="Angry">
+                                    <i class="fas fa-angry"></i>
+                                    <span>Angry</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="date-input-container">
+                            <label for="entry-date">Entry Date:</label>
+                            <input type="date" id="entry-date" class="date-input">
+                        </div>
+
+                        <div class="diary-editor">
+                            <label for="diary-content">What's on your mind?</label>
+                            <textarea 
+                                id="diary-content" 
+                                placeholder="Write about your day, thoughts, dreams, or anything that matters to you..."
+                                rows="8"
+                            ></textarea>
+                            <div class="editor-toolbar">
+                                <span class="word-count" id="word-count">0 words</span>
+                                <button type="button" id="save-entry" class="save-btn">
+                                    <i class="fas fa-save"></i>
+                                    Save Entry
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="calendar-tab" class="tab-content">
+                    <div class="calendar-header">
+                        <h2>Calendar View</h2>
+                        <div class="calendar-controls">
+                            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                            <span id="current-month"></span>
+                            <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div id="calendar" class="calendar-grid"></div>
+                </section>
+
+                <section id="analytics-tab" class="tab-content">
+                    <div class="analytics-header">
+                        <h2>Mood Analytics</h2>
+                        <p>Track your emotional journey over time</p>
+                    </div>
+                    <div class="analytics-content">
+                        <div class="chart-container">
+                            <canvas id="mood-chart"></canvas>
+                        </div>
+                        <div class="mood-stats">
+                            <div class="stat-card">
+                                <i class="fas fa-calendar-day"></i>
+                                <div>
+                                    <span class="stat-number" id="total-entries">0</span>
+                                    <span class="stat-label">Total Entries</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-smile"></i>
+                                <div>
+                                    <span class="stat-number" id="happy-days">0</span>
+                                    <span class="stat-label">Happy Days</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-fire"></i>
+                                <div>
+                                    <span class="stat-number" id="current-streak">0</span>
+                                    <span class="stat-label">Current Streak</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="settings-tab" class="tab-content">
+                    <div class="settings-header">
+                        <h2>Settings</h2>
+                        <p>Customize your diary experience</p>
+                    </div>
+                    <div class="settings-content">
+                        <div class="setting-group">
+                            <h3>Data Management</h3>
+                            <div class="setting-item">
+                                <label for="delete-date">Delete specific entry:</label>
+                                <div class="delete-controls">
+                                    <input type="date" id="delete-date" class="date-input">
+                                    <button id="delete-entry" class="delete-btn">
+                                        <i class="fas fa-trash"></i>
+                                        Delete Entry
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <button id="export-data" class="export-btn">
+                                    <i class="fas fa-download"></i>
+                                    Export All Data
+                                </button>
+                                <button id="reset-all" class="reset-btn">
+                                    <i class="fas fa-refresh"></i>
+                                    Reset All Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="entry-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-date"></h3>
+                <button class="close-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-mood">
+                    <span id="modal-mood-icon"></span>
+                    <span id="modal-mood-text"></span>
+                </div>
+                <div class="modal-entry" id="modal-entry"></div>
+            </div>
+        </div>
+    </div>
+
+   
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Entry saved successfully!</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
